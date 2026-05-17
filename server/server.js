@@ -38,9 +38,15 @@ connectDB();
 // Helmet sets secure HTTP headers (XSS, clickjacking, etc.)
 app.use(helmet());
 
-// CORS: only allow your frontend origin in production
+// CORS: allow your frontend origin (localhost or any Render URL)
 app.use(cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: function (origin, callback) {
+        if (!origin || origin.includes('localhost') || origin.endsWith('.onrender.com')) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true, // allow cookies/auth headers
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],

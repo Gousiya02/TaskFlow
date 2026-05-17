@@ -10,11 +10,7 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: CLIENT_URL
-        fromService:
-          type: web
-          name: taskflow-client
-          envVarKey: RENDER_EXTERNAL_URL
+
       - key: MONGO_URI
         sync: false
       - key: JWT_SECRET
