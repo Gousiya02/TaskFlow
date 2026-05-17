@@ -14,11 +14,11 @@ services:
           type: web
           name: taskflow-client
           envVarKey: RENDER_EXTERNAL_URL
-      - key: MONGODB_URI
+      - key: MONGO_URI
         sync: false
       - key: JWT_SECRET
         sync: false
-      - key: OPENAI_API_KEY
+      - key: GEMINI_API_KEY
         sync: false
 
   # Frontend React/Vite Client
