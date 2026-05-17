@@ -1,0 +1,40 @@
+services:
+  # Backend Node.js API
+  - type: web
+    name: taskflow-api
+    env: node
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CLIENT_URL
+        fromService:
+          type: web
+          name: taskflow-client
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+
+  # Frontend React/Vite Client
+  - type: web
+    name: taskflow-client
+    env: static
+    rootDir: client
+    buildCommand: export VITE_API_URL="${API_URL}/api" && npm install && npm run build
+    staticPublishPath: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: API_URL
+        fromService:
+          type: web
+          name: taskflow-api
+          envVarKey: RENDER_EXTERNAL_URL
